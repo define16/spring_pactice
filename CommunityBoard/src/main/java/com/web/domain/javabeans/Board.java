@@ -1,14 +1,17 @@
-package com.web.domain;
+package com.web.domain.javabeans;
 
+import com.web.domain.lombok.User;
 import com.web.domain.enums.BoardType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity

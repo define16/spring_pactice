@@ -1,4 +1,4 @@
-package com.web.domain;
+package com.web.domain.lombok;
 
 import lombok.Builder;
 import lombok.Getter;
