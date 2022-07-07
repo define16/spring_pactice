@@ -89,8 +89,14 @@ public class LombokTests {
     }
 
     @Test
-    public void testNoArgsConstructor2() {
-        Member member = new Member();
+    public void testRequiredArgsConstructor() {
+        Board2 board = new Board2(1);
+        System.out.println(board);
+    }
+
+    @Test
+    public void testRequiredArgsConstructor2() {
+        Member2 member = new Member2("userId1", "password1");
         System.out.println(member);
     }
 }
