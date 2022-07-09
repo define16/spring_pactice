@@ -3,6 +3,7 @@ package com.web;
 import com.web.domain.lombok.*;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -98,5 +99,18 @@ public class LombokTests {
     public void testRequiredArgsConstructor2() {
         Member2 member = new Member2("userId1", "password1");
         System.out.println(member);
+    }
+
+    @Test
+    public void testData() {
+        Board3 board = new Board3(1);
+        System.out.println(board);
+        board.setTitle("게시판 제목");
+        System.out.println(board);
+    }
+    @Test
+    public void testBuilder() {
+        Board4 board = Board4.builder().boardNo(1).content("content").writer("writer").title("title").regDate(LocalDateTime.now()).build();
+        System.out.println(board);
     }
 }
