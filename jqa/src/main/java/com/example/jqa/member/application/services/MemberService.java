@@ -1,4 +1,4 @@
-package com.example.jqa.member.application;
+package com.example.jqa.member.application.services;
 
 import com.example.jqa.member.dao.MemberRepositoryInterface;
 import com.example.jqa.member.domain.Member;
