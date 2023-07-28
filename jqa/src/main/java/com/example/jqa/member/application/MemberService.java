@@ -1,7 +1,7 @@
 package com.example.jqa.member.application;
 
-import com.example.jqa.member.domain.Member;
 import com.example.jqa.member.dao.MemberRepositoryInterface;
+import com.example.jqa.member.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/")
+@RequestMapping(value = "/api/v1/member")
 @Tag(name = "Member", description = "템플릿 API Document")
 public class MemberController {
     // 기본형
@@ -36,7 +36,7 @@ public class MemberController {
      */
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "Member 전체 불러오기", description = "Member 전체 불러오기", tags = {"View"})
-    public ResponseEntity<List<Member>> getAllmembers() {
+    public ResponseEntity<List<Member>> getAllMembers() {
         List<Member> member = memberService.findAll();
         return new ResponseEntity<List<Member>>(member, HttpStatus.OK);
     }
@@ -95,7 +95,7 @@ public class MemberController {
      *
      * @return ApiResponseWrapper< Member> : 응답 결과 및 응답 코드 반환
      */
-    @RequestMapping(value="/saveMember", method = RequestMethod.GET)
+    @RequestMapping(value="/save", method = RequestMethod.GET)
     @Operation(summary = "Member 저장???", description = "Member 저장??")
     public ResponseEntity<Member> save(HttpServletRequest req, Member member){
         return new ResponseEntity<Member>(memberService.save(member), HttpStatus.OK);
