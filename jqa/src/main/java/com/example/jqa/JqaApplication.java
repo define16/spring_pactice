@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class JqaApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(JqaApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JqaApplication.class, args);
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.jqa.administrator.application;
+package com.example.jqa.administrator.application.service;
 
 import com.example.jqa.administrator.dao.AdministratorRepositoryInterface;
 import com.example.jqa.administrator.domain.Administrator;
@@ -20,12 +20,12 @@ public class AdministratorService {
         return administrators;
     }
 
-    public Optional<Administrator> findById(Long mbrNo) {
-        return administratorRepository.findById(mbrNo);
+    public Optional<Administrator> findById(Long adminNo) {
+        return administratorRepository.findById(adminNo);
     }
 
-    public void deleteById(Long mbrNo) {
-        administratorRepository.deleteById(mbrNo);
+    public void deleteById(Long adminNo) {
+        administratorRepository.deleteById(adminNo);
     }
 
     public Administrator save(Administrator administrator) {
@@ -33,8 +33,8 @@ public class AdministratorService {
         return administrator;
     }
 
-    public void updateById(Long mbrNo, Administrator administrator) {
-        Optional<Administrator> e = administratorRepository.findById(mbrNo);
+    public void updateById(Long adminNo, Administrator administrator) {
+        Optional<Administrator> e = administratorRepository.findById(adminNo);
 
         if (e.isPresent()) {
             e.get().setAdministratorNo(administrator.getAdministratorNo());

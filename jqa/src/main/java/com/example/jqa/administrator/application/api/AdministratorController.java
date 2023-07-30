@@ -1,6 +1,6 @@
-package com.example.jqa.administrator.api;
+package com.example.jqa.administrator.application.api;
 
-import com.example.jqa.administrator.application.AdministratorService;
+import com.example.jqa.administrator.application.service.AdministratorService;
 import com.example.jqa.administrator.domain.Administrator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

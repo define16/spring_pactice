@@ -1,9 +1,10 @@
-package com.example.jqa.member.api;
+package com.example.jqa.member.application.api;
 
 import com.example.jqa.member.application.responses.NaverProfileResponse;
 import com.example.jqa.member.domain.Member;
 import com.example.jqa.member.application.services.MemberService;
 import com.example.jqa.member.domain.naver.NaverOAuthToken;
+import com.example.jqa.parameterstore.application.service.ParameterStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,6 +35,8 @@ public class MemberController {
 
     @Autowired  // 필요한 의존 객체의 “타입"에 해당하는 빈을 찾아 주입한다.
     MemberService memberService;
+    @Autowired
+    ParameterStoreService parameterStoreService;
 
     /**
      * [API]  모든 회원 조회
@@ -108,13 +111,13 @@ public class MemberController {
     }
 
 
-    // 회원 입력??
     /**
      * [API] 유저로 부터 네이버 인가 코드를 전송 받는 API
      *
      * @return ApiResponseWrapper< Member> : 응답 결과 및 응답 코드 반환
      */
     @RequestMapping("/auth/naver/login/callback")
+    @Operation(summary = "유저로 부터 네이버 인가 코드를 전송 받는 API", description = "유저로 부터 네이버 인가 코드를 전송 받는 API")
     public ResponseEntity<Void> naverCallback(String code, String state) throws JsonProcessingException {
         final String CLIENT_ID = "";
         final String CLIENT_SECRET = "";
@@ -159,6 +162,11 @@ public class MemberController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    /**
+     * [API] 네이버 토근 만드는 API
+     *
+     * @return ApiResponseWrapper< Member> : 응답 결과 및 응답 코드 반환
+     */
     private HttpEntity<MultiValueMap<String, String>> makeTokenRequest(MultiValueMap<String, String> params) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -166,6 +174,11 @@ public class MemberController {
         return naverTokenRequest;
     }
 
+    /**
+     * [API] 네이버 프로파일 만드는 API
+     *
+     * @return ApiResponseWrapper< Member> : 응답 결과 및 응답 코드 반환
+     */
     private HttpEntity<MultiValueMap<String, String>> makeProfileRequest(NaverOAuthToken naverToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer "+ naverToken.getAccess_token());
