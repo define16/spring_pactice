@@ -2,6 +2,7 @@ package com.example.jqa.parameterstore.application.service;
 
 import com.example.jqa.parameterstore.dao.ParameterStoreRepositoryInterface;
 import com.example.jqa.parameterstore.domain.ParameterStore;
+import com.example.jqa.parameterstore.dto.ParameterStoreDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,13 +47,13 @@ public class ParameterStoreService {
         }
     }
 
-    public void updateByParameterType(String parameterStoreType, ParameterStore parameterStore) {
+    public void updateByParameterType(String parameterStoreType, ParameterStoreDto.Parameter parameter) {
         Optional<ParameterStore> e = parameterStoreRepository.findByParameterType(parameterStoreType);
 
         if (e.isPresent()) {
-            e.get().setParameterType(parameterStore.getParameterType());
-            e.get().setParameterValue(parameterStore.getParameterValue());
-            parameterStoreRepository.save(parameterStore);
+            e.get().setParameterType(parameter.getParameterType());
+            e.get().setParameterValue(parameter.getParameterValue());
+            parameterStoreRepository.save(e.get());
         }
     }
 

@@ -58,9 +58,10 @@ public class ParameterStoreController {
      */
     @PutMapping(value = "/{parameterType}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "ParameterStore 수정", description = "ParameterStore 수정")
-    public ResponseEntity<ParameterStore> updateParameterStore(@PathVariable("parameterType") String parameterType, ParameterStore parameterStore) {
-        parameterStoreService.updateByParameterType(parameterType, parameterStore);
-        return new ResponseEntity<ParameterStore>(parameterStore, HttpStatus.OK);
+    public ResponseEntity<Optional<ParameterStore>> updateParameterStore(@PathVariable("parameterType") String parameterType, @RequestBody ParameterStoreDto.Parameter parameter) {
+        parameterStoreService.updateByParameterType(parameterType, parameter);
+        Optional<ParameterStore> parameterStore = parameterStoreService.findByParameterType(parameterType);
+        return new ResponseEntity<Optional<ParameterStore>>(parameterStore, HttpStatus.OK);
     }
 
     // 회원 입력
