@@ -8,19 +8,21 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @TypeDef(name = "jsonb", typeClass = JsonStringType.class) // Entity class 상단에 설정
 @Entity(name="parameter_store")
 @Schema(description = "ParameterStore 스키마")
-@EntityListeners(AuditingEntityListener.class)
 public class ParameterStore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,11 +38,13 @@ public class ParameterStore {
     private Map<String, Object> parameterValue;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "update_at")
+    @Column(name = "update_at", updatable = false)
+    @Convert(converter = Jsr310JpaConverters.LocalDateTimeConverter.class)
     private LocalDateTime updatedAt;
 
 
