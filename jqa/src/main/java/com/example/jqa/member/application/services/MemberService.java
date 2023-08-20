@@ -1,6 +1,7 @@
 package com.example.jqa.member.application.services;
 
 import com.example.jqa.member.dao.MemberRepositoryInterface;
+import com.example.jqa.member.domain.Email;
 import com.example.jqa.member.domain.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,12 @@ public class MemberService {
         Optional<Member> member = memberRepository.findById(mbrNo);
         return member;
     }
+
+    public Optional<Member> findByEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(Email.builder().value(email).build());
+        return member;
+    }
+
 
     public void deleteById(Long mbrNo) {
         memberRepository.deleteById(mbrNo);

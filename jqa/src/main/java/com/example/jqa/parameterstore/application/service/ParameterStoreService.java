@@ -26,14 +26,20 @@ public class ParameterStoreService {
         return parameterStores;
     }
 
-    public Optional<ParameterStore> findByParameterStoreNo(Long parameterStoreNo) {
+    public ParameterStore findByParameterStoreNo(Long parameterStoreNo) throws Exception {
         Optional<ParameterStore> parameterStore = parameterStoreRepository.findByParameterStoreNo(parameterStoreNo);
-        return parameterStore;
+        if (!parameterStore.isPresent()) {
+            throw new Exception("해당 정보가 없습니다.");
+        }
+        return parameterStore.get();
     }
 
-    public Optional<ParameterStore> findByParameterType(String parameterType) {
+    public ParameterStore findByParameterType(String parameterType) throws Exception {
         Optional<ParameterStore> parameterStore = parameterStoreRepository.findByParameterType(parameterType);
-        return parameterStore;
+        if (!parameterStore.isPresent()) {
+            throw new Exception(parameterType + "의 정보가 없습니다.");
+        }
+        return parameterStore.get();
     }
 
 
@@ -49,7 +55,6 @@ public class ParameterStoreService {
 
     public void updateByParameterType(String parameterStoreType, ParameterStoreDto.Parameter parameter) {
         Optional<ParameterStore> e = parameterStoreRepository.findByParameterType(parameterStoreType);
-
         if (e.isPresent()) {
             e.get().setParameterType(parameter.getParameterType());
             e.get().setParameterValue(parameter.getParameterValue());

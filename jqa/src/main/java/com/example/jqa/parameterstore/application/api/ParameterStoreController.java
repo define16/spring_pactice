@@ -46,9 +46,9 @@ public class ParameterStoreController {
      */
     @GetMapping(value = "/{parameterType}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "ParameterStore 타입으로 불러오기", description = "ParameterStore 넘버로 불러오기", tags = {"View"})
-    public ResponseEntity<ParameterStore> getParameterStore(@PathVariable("parameterType") String parameterType) {
-        Optional<ParameterStore> parameterStore = parameterStoreService.findByParameterType(parameterType);
-        return new ResponseEntity<ParameterStore>(parameterStore.get(), HttpStatus.OK);
+    public ResponseEntity<ParameterStore> getParameterStore(@PathVariable("parameterType") String parameterType) throws Exception {
+        ParameterStore parameterStore = parameterStoreService.findByParameterType(parameterType);
+        return new ResponseEntity<ParameterStore>(parameterStore, HttpStatus.OK);
     }
 
     /**
@@ -58,10 +58,10 @@ public class ParameterStoreController {
      */
     @PutMapping(value = "/{parameterType}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "ParameterStore 수정", description = "ParameterStore 수정")
-    public ResponseEntity<Optional<ParameterStore>> updateParameterStore(@PathVariable("parameterType") String parameterType, @RequestBody ParameterStoreDto.Parameter parameter) {
+    public ResponseEntity<ParameterStore> updateParameterStore(@PathVariable("parameterType") String parameterType, @RequestBody ParameterStoreDto.Parameter parameter) throws Exception {
         parameterStoreService.updateByParameterType(parameterType, parameter);
-        Optional<ParameterStore> parameterStore = parameterStoreService.findByParameterType(parameterType);
-        return new ResponseEntity<Optional<ParameterStore>>(parameterStore, HttpStatus.OK);
+        ParameterStore parameterStore = parameterStoreService.findByParameterType(parameterType);
+        return new ResponseEntity<ParameterStore>(parameterStore, HttpStatus.OK);
     }
 
     // 회원 입력

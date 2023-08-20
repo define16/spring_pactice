@@ -1,9 +1,11 @@
 package com.example.jqa.member.dao;
 
+import com.example.jqa.member.domain.Email;
 import com.example.jqa.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepositoryInterface extends JpaRepository<Member, Long> {
     //비워있어도 잘 작동함.
@@ -16,4 +18,5 @@ public interface MemberRepositoryInterface extends JpaRepository<Member, Long> {
 
     //like검색도 가능
     public List<Member> findByNameLike(String keyword);
+    public Optional<Member> findByEmail(Email email);
 }

@@ -1,5 +1,10 @@
 package com.example.jqa.member.domain.naver;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Data;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@Data
 public class NaverProfile {
     private String email;
     private String nickname;
@@ -11,15 +16,4 @@ public class NaverProfile {
     private String birthday;
     private String birthyear;
     private String mobile;
-
-    public NaverProfile() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
 }

@@ -1,10 +1,12 @@
 package com.example.jqa.member.application.api;
 
 import com.example.jqa.member.application.responses.NaverProfileResponse;
+import com.example.jqa.member.domain.Email;
 import com.example.jqa.member.domain.Member;
 import com.example.jqa.member.application.services.MemberService;
 import com.example.jqa.member.domain.naver.NaverOAuthToken;
 import com.example.jqa.parameterstore.application.service.ParameterStoreService;
+import com.example.jqa.parameterstore.domain.ParameterStore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -32,11 +36,20 @@ public class MemberController {
     // 기본형
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-
     @Autowired  // 필요한 의존 객체의 “타입"에 해당하는 빈을 찾아 주입한다.
-    MemberService memberService;
+    private MemberService memberService;
     @Autowired
-    ParameterStoreService parameterStoreService;
+    private ParameterStoreService parameterStoreService;
+
+    private Map<String, Object> getNaverApiKey(){
+        try {
+            ParameterStore paramterStore = parameterStoreService.findByParameterType("naver");
+            return paramterStore.getParameterValue();
+        } catch (Exception e) {
+            return new HashMap<String, Object>();
+        }
+    }
+
 
     /**
      * [API]  모든 회원 조회
@@ -119,22 +132,24 @@ public class MemberController {
     @RequestMapping("/auth/naver/login/callback")
     @Operation(summary = "유저로 부터 네이버 인가 코드를 전송 받는 API", description = "유저로 부터 네이버 인가 코드를 전송 받는 API")
     public ResponseEntity<Void> naverCallback(String code, String state) throws JsonProcessingException {
-        final String CLIENT_ID = "";
-        final String CLIENT_SECRET = "";
-        final String TOKEN_REQUEST_URL = "";
-        final String PROFILE_REQUEST_URL = "";
+        Map<String, Object> naverApiKey = getNaverApiKey();
+        if (naverApiKey.isEmpty()){
+            return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+        }
+        String clientId = (String) naverApiKey.get("client_id");
+        String clientSecret = (String) naverApiKey.get("client_secret");
+        final String TOKEN_REQUEST_URL = "https://nid.naver.com/oauth2.0/token";
+        final String PROFILE_REQUEST_URL = "https://openapi.naver.com/v1/nid/me";
+        final String PROFILE_VERIFY_URL = "https://openapi.naver.com/v1/nid/verify";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
-        params.add("client_id",CLIENT_ID);
-        params.add("client_secret", CLIENT_SECRET);
+        params.add("client_id",clientId);
+        params.add("client_secret", clientSecret);
         params.add("code", code);
         params.add("state", state);
-        // Parameter로 전달할 속성들 추가
 
         HttpEntity<MultiValueMap<String, String>> naverTokenRequest = makeTokenRequest(params);
-        // Http 메시지 생성
-
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> tokenResponse = rt.exchange(
                 TOKEN_REQUEST_URL,
@@ -142,12 +157,20 @@ public class MemberController {
                 naverTokenRequest,
                 String.class
         );
-        // TOKEN_REQUEST_URL로 Http 요청 전송
         ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(tokenResponse.getBody());
         NaverOAuthToken naverToken = objectMapper.readValue(tokenResponse.getBody(), NaverOAuthToken.class);
-        // ObjectMapper를 통해 NaverOAuthToken 객체로 매핑
+
 
         HttpEntity<MultiValueMap<String, String>> naverProfileRequest = makeProfileRequest(naverToken);
+        ResponseEntity<String> verifyResponse = rt.exchange(
+                PROFILE_VERIFY_URL,
+                HttpMethod.POST,
+                naverTokenRequest,
+                String.class
+        );
+        System.out.println(verifyResponse.getBody());
+
 
         ResponseEntity<String> profileResponse = rt.exchange(
                 PROFILE_REQUEST_URL,
@@ -155,9 +178,17 @@ public class MemberController {
                 naverProfileRequest,
                 String.class
         );
-
+        System.out.println(profileResponse.getBody());
         NaverProfileResponse naverProfileResponse = objectMapper.readValue(profileResponse.getBody(), NaverProfileResponse.class);
 
+        String email = naverProfileResponse.getResponse().getEmail();
+        Optional<Member> member = memberService.findByEmail(email);
+        if (!member.isPresent()){
+            return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+        }
+        if (member.get().getNaverId() == null) {
+            member.get().setNaverId(naverProfileResponse.getResponse().getId());
+        }
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
@@ -187,4 +218,7 @@ public class MemberController {
         return naverProfileRequest;
     }
 
+    private void aa() {
+
+    }
 }

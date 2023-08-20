@@ -32,6 +32,13 @@ public class Member {
     @Schema(description = "멤버 이메일")
     private Email email;
 
+    @Schema(description = "출생 연도")
+    private String birthYear;
+    @Schema(description = "휴대전화번호")
+    private String phoneNumber;
+    @Schema(description = "네이버 로그인API 동일인 식별정보")
+    private String naverId;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -42,11 +49,13 @@ public class Member {
 
 
     @Builder
-    public Member(String id, String name, Password password, Address address, Email email) {
+    public Member(String id, String name, Password password, Address address, Email email, String birthYear, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.address = address;
         this.email = email;
+        this.birthYear = birthYear;
+        this.phoneNumber = phoneNumber;
     }
 }
